@@ -4,7 +4,9 @@ import '../bloc/crypto_bloc.dart';
 import '../bloc/crypto_state.dart';
 import '../widgets/crypto_list_tile.dart';
 import '../widgets/crypto_detail_bottom_sheet.dart';
-
+import '../bloc/crypto_event.dart';
+import 'package:marsky_crypto_dashboard/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:marsky_crypto_dashboard/features/auth/presentation/bloc/auth_event.dart';
 
 class CryptoListPage extends StatelessWidget {
   const CryptoListPage({super.key});
@@ -15,9 +17,55 @@ class CryptoListPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Market'),
         actions: [
+          PopupMenuButton<CryptoSortType>(
+            icon: const Icon(Icons.sort),
+            onSelected: (sortType) {
+              context.read<CryptoBloc>().add(SortCryptosEvent(sortType: sortType));
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: CryptoSortType.rank, child: Text('Rank (Varsayılan)')),
+              const PopupMenuItem(value: CryptoSortType.price, child: Text('Fiyat (En Yüksek)')),
+              const PopupMenuItem(value: CryptoSortType.marketCap, child: Text('Market Değeri')),
+              const PopupMenuItem(value: CryptoSortType.change, child: Text('Değişim (24s)')),
+              const PopupMenuItem(value: CryptoSortType.listedAt, child: Text('Listelenme Tarihi')),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext dialogContext) {
+                  return AlertDialog(
+                    title: const Text('Çıkış Yap'),
+                    content: const Text('Hesabınızdan çıkış yapmak istediğinize emin misiniz?'),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(dialogContext).pop();
+                        },
+                        child: const Text(
+                          'İptal',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(dialogContext).pop();
+                          context.read<AuthBloc>().add(SignOutEvent());
+                        },
+                        child: const Text(
+                          'Çıkış Yap',
+                          style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
@@ -47,7 +95,9 @@ class CryptoListPage extends StatelessWidget {
                     );
                   },
                   onFavoriteTapped: () {
-                    print('${crypto.name} favori butonuna basıldı!');
+                    context.read<CryptoBloc>().add(
+                      ToggleFavoriteEvent(id: crypto.id),
+                    );
                   },
                 );
               },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'crypto_list_page.dart'; 
-import 'favorites_page.dart';  
+import 'favorites_page.dart';
+
 
 class MainView extends StatefulWidget {
   const MainView({super.key});

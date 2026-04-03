@@ -16,3 +16,23 @@ class GetCryptosListEvent extends CryptoEvent {
   @override
   List<Object> get props => [limit, offset];
 }
+
+class ToggleFavoriteEvent extends CryptoEvent {
+  final String id;
+
+  const ToggleFavoriteEvent({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}
+
+enum CryptoSortType { rank, price, marketCap, change, listedAt }
+
+class SortCryptosEvent extends CryptoEvent {
+  final CryptoSortType sortType;
+
+  const SortCryptosEvent({required this.sortType});
+
+  @override
+  List<Object> get props => [sortType];
+}
