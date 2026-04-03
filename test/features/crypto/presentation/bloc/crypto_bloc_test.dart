@@ -32,6 +32,7 @@ void main() {
       id: '1', rank: 1, symbol: 'BTC', name: 'Bitcoin', price: 50000.0, 
       change: 2.5, marketCap: 1000000.0, listedAt: 123456789, 
       iconUrl: 'url', sparkline: [],
+      volume: 5000000.0,
     )
   ];
 
@@ -49,7 +50,8 @@ void main() {
     act: (bloc) => bloc.add(const GetCryptosListEvent()),
     expect: () => [
       CryptoLoading(),
-      CryptoLoaded(cryptos: tCryptoList),
+      // hasReachedMax değerini true olarak güncelledik çünkü 1 tane veri geliyor (1 < 50)
+      CryptoLoaded(cryptos: tCryptoList, hasReachedMax: true), 
     ],
   );
 

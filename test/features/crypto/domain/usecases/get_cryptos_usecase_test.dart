@@ -29,6 +29,7 @@ void main() {
       listedAt: 123456789,
       iconUrl: 'https://test.com/btc.png',
       sparkline: [49000.0, 50000.0],
+      volume: 5000000.0,
     )
   ];
 

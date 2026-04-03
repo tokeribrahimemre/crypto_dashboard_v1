@@ -12,44 +12,43 @@ class CryptoModel extends CryptoEntity {
     required super.listedAt,
     required super.iconUrl,
     required super.sparkline,
+    required super.volume,
     super.isFavorite,
   });
 
   factory CryptoModel.fromJson(Map<String, dynamic> json) {
     return CryptoModel(
       id: json['uuid'] ?? '',
+      // ESNEK TİP DÖNÜŞÜMÜ: String gelse bile int'e çeviriyoruz
+      rank: int.tryParse(json['rank']?.toString() ?? '0') ?? 0,
       symbol: json['symbol'] ?? '',
       name: json['name'] ?? '',
+      price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
+      change: double.tryParse(json['change']?.toString() ?? '0') ?? 0.0,
+      marketCap: double.tryParse(json['marketCap']?.toString() ?? '0') ?? 0.0,
+      // ESNEK TİP DÖNÜŞÜMÜ: listedAt bazen büyük sayı (timestamp) olarak String gelebilir
+      listedAt: int.tryParse(json['listedAt']?.toString() ?? '0') ?? 0,
       iconUrl: json['iconUrl'] ?? '',
-      
-      rank: _parseInt(json['rank']),
-      listedAt: _parseInt(json['listedAt']),
-      
-      price: _parseDouble(json['price']),
-      change: _parseDouble(json['change']),
-      marketCap: _parseDouble(json['marketCap']),
-      
       sparkline: (json['sparkline'] as List<dynamic>?)
-              ?.map((e) => _parseDouble(e))
-              .toList() ??
-          [],
+              ?.map((e) => double.tryParse(e?.toString() ?? '0') ?? 0.0)
+              .toList() ?? [],
+      volume: double.tryParse(json['24hVolume']?.toString() ?? '0') ?? 0.0,
     );
   }
 
-
-  static double _parseDouble(dynamic value) {
-    if (value == null) return 0.0;
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0.0;
-    return 0.0;
-  }
-
-  static int _parseInt(dynamic value) {
-    if (value == null) return 0;
-    if (value is int) return value;
-    if (value is String) return int.tryParse(value) ?? 0;
-    if (value is double) return value.toInt();
-    return 0;
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': id,
+      'rank': rank,
+      'symbol': symbol,
+      'name': name,
+      'price': price.toString(),
+      'change': change.toString(),
+      'marketCap': marketCap.toString(),
+      'listedAt': listedAt,
+      'iconUrl': iconUrl,
+      'sparkline': sparkline.map((e) => e.toString()).toList(),
+      '24hVolume': volume.toString(),
+    };
   }
 }

@@ -14,11 +14,25 @@ class CryptoLoading extends CryptoState {}
 
 class CryptoLoaded extends CryptoState {
   final List<CryptoEntity> cryptos;
+  final bool hasReachedMax;
 
-  const CryptoLoaded({required this.cryptos});
+  const CryptoLoaded({
+    required this.cryptos,
+    this.hasReachedMax = false,
+  });
+
+  CryptoLoaded copyWith({
+    List<CryptoEntity>? cryptos,
+    bool? hasReachedMax,
+  }) {
+    return CryptoLoaded(
+      cryptos: cryptos ?? this.cryptos,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+    );
+  }
 
   @override
-  List<Object> get props => [cryptos];
+  List<Object> get props => [cryptos, hasReachedMax];
 }
 
 class CryptoError extends CryptoState {

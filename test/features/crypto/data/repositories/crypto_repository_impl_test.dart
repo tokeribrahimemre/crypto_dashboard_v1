@@ -30,6 +30,7 @@ void main() {
       id: '1', rank: 1, symbol: 'BTC', name: 'Bitcoin', price: 50000.0, 
       change: 2.5, marketCap: 1000000.0, listedAt: 123456789, 
       iconUrl: 'url', sparkline: [], isFavorite: false,
+      volume: 5000000.0,
     )
   ];
 
