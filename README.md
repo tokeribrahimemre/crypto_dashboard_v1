@@ -1,4 +1,4 @@
-# marsky_crypto_dashboard
+# crypto_dashboard
 
 A new Flutter project.
 
